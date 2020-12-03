@@ -16,6 +16,29 @@ function GlobalContextProvider({ children }) {
 						users: usersData,
 					};
 				}
+				case 'ADD_NEW_POST': {
+					return {
+						...state,
+						posts: [...state.posts, action.newPost],
+					};
+				}
+				case 'UPDATE_CURRENT_USER': {
+					const newUsersArray = state.users.map(user => {
+						if (user.userId === state.currentUser) {
+							// update the user and return it
+							return {
+								...user,
+								userName: action.userName,
+								profilePictureUrl: action.profilePictureUrl,
+							};
+						}
+						return user;
+					});
+					return {
+						...state,
+						users: newUsersArray,
+					};
+				}
 				default: {
 					console.error('No actions defined for', action.type);
 					break;
@@ -27,12 +50,13 @@ function GlobalContextProvider({ children }) {
 			loading: true,
 			posts: [],
 			users: [],
-			currentUser: '',
+			currentUser: '1',
 		}
 	);
 
 	useEffect(() => {
 		setTimeout(() => {
+			'';
 			dispatch({ type: 'LOAD_JSON_DATA' });
 		}, 1000);
 	}, []);
