@@ -1,16 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { GlobalContext } from './GlobalContext';
-import styled from 'styled-components';
-import { resetWarningCache } from 'prop-types';
-
-const FormStyle = styled.form`
-	display: grid;
-	gap: 10px;
-	grid-template-columns: 200px;
-	textarea {
-		height: 100px;
-	}
-`;
+import { FormStyle } from './Styles';
 
 export default function AddPost() {
 	const [postContent, setPostContent] = useState('');

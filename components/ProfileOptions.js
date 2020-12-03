@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { GlobalContext } from './GlobalContext';
+import { FormStyle } from './Styles';
 
 export default function ProfileOptions() {
 	const { state, dispatch } = useContext(GlobalContext);
@@ -27,7 +28,7 @@ export default function ProfileOptions() {
 	return (
 		<div>
 			<h2>Profile Options</h2>
-			<form onSubmit={handleNewOptions}>
+			<FormStyle onSubmit={handleNewOptions}>
 				<input
 					type="text"
 					value={userName}
@@ -41,7 +42,7 @@ export default function ProfileOptions() {
 					required
 				/>
 				<button>Save</button>
-			</form>
+			</FormStyle>
 		</div>
 	);
 }
