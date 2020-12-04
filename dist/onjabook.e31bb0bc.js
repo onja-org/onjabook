@@ -36177,7 +36177,7 @@ function AddPost() {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = Post;
+exports.Post = Post;
 exports.PostContext = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
@@ -36583,7 +36583,7 @@ var _styledComponents = _interopRequireDefault(require("styled-components"));
 
 var _GlobalContext = require("./GlobalContext");
 
-var _Post = _interopRequireDefault(require("./Post/Post"));
+var _Post = require("./Post/Post");
 
 var _PostHeader = _interopRequireDefault(require("./Post/PostHeader"));
 
@@ -36625,7 +36625,7 @@ function Feed() {
   var posts = state.posts,
       loading = state.loading;
   return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("h2", null, "Feed"), loading && _react.default.createElement("p", null, "Loading..."), !loading && posts && _react.default.createElement(FeedListStyle, null, posts.map(function (post) {
-    return _react.default.createElement(_Post.default, {
+    return _react.default.createElement(_Post.Post, {
       key: post.postId,
       post: post
     }, _react.default.createElement(_PostHeader.default, null), _react.default.createElement(_PostDescription.default, null, post.postTextContent), _react.default.createElement(_PostImage.default, null), _react.default.createElement(_PostLikes.default, null), _react.default.createElement(_PostComments.default, null), _react.default.createElement(_PostAddComment.default, null));
@@ -36860,7 +36860,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53886" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56105" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

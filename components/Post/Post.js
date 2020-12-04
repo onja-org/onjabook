@@ -23,7 +23,7 @@ const PostStyles = styled.div`
 
 const PostContext = createContext();
 
-export default function Post({ post, children }) {
+function Post({ post, children }) {
 	const { state } = useContext(GlobalContext);
 	const { users, currentUser } = state;
 	const currentUserObj = users.find(user => user.userId === currentUser);
@@ -34,4 +34,4 @@ export default function Post({ post, children }) {
 	);
 }
 
-export { PostContext };
+export { PostContext, Post };

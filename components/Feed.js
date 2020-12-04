@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { GlobalContext } from './GlobalContext';
 
-import Post from './Post/Post';
+import { Post } from './Post/Post';
 import PostHeader from './Post/PostHeader';
 import PostDescription from './Post/PostDescription';
 import PostImage from './Post/PostImage';
