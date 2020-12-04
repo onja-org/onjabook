@@ -9,9 +9,8 @@ export default function AddPost() {
 	const { state, dispatch } = useContext(GlobalContext);
 	const { currentUser } = state;
 
-	function handleNewPost(e) {
+	function createNewPost(e) {
 		e.preventDefault();
-		const form = e.target;
 		const newPost = {
 			postId: Date.now(),
 			date: new Date(),
@@ -21,7 +20,6 @@ export default function AddPost() {
 			likes: [],
 			comments: [],
 		};
-		console.log({ newPost });
 		dispatch({ type: 'ADD_NEW_POST', newPost: newPost });
 		resetForm();
 		alert('Post added.');
@@ -35,7 +33,7 @@ export default function AddPost() {
 	return (
 		<div>
 			<h2>Add a post</h2>
-			<FormStyle onSubmit={handleNewPost}>
+			<FormStyle onSubmit={createNewPost}>
 				<label>New post content:</label>
 				<textarea
 					placeholder="Say what's on your mind..."

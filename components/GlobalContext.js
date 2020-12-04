@@ -9,6 +9,7 @@ function GlobalContextProvider({ children }) {
 		(state, action) => {
 			switch (action.type) {
 				case 'LOAD_JSON_DATA': {
+					// there should be some fetching here
 					return {
 						...state,
 						loading: false,
@@ -37,6 +38,21 @@ function GlobalContextProvider({ children }) {
 					return {
 						...state,
 						users: newUsersArray,
+					};
+				}
+				case 'LIKE_POST': {
+					const newPosts = state.posts.map(post => {
+						if (post.postId === action.postId) {
+							return {
+								...post,
+								likes: [...post.likes, action.newLike],
+							};
+						}
+						return post;
+					});
+					return {
+						...state,
+						posts: newPosts,
 					};
 				}
 				default: {
