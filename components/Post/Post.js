@@ -26,7 +26,7 @@ const PostContext = createContext();
 function Post({ post, children }) {
 	const { state } = useContext(GlobalContext);
 	const { users, currentUser } = state;
-	const currentUserObj = users.find(user => user.userId === currentUser);
+	const currentUserObj = users.find(user => user.userId === post.userId);
 	return (
 		<PostContext.Provider value={{ post, currentUserObj }}>
 			<PostStyles>{children}</PostStyles>

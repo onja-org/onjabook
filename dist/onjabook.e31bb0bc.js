@@ -34053,6 +34053,20 @@ function GlobalContextProvider(_ref) {
           });
         }
 
+      case 'SWITCH_USER_ACCOUNT':
+        {
+          return _objectSpread({}, state, {
+            currentUser: action.newUserId
+          });
+        }
+
+      case 'ADD_NEW_USER':
+        {
+          return _objectSpread({}, state, {
+            users: [].concat(_toConsumableArray(state.users), [action.newUser])
+          });
+        }
+
       default:
         {
           console.error('No actions defined for', action.type);
@@ -36227,7 +36241,7 @@ function Post(_ref) {
   var users = state.users,
       currentUser = state.currentUser;
   var currentUserObj = users.find(function (user) {
-    return user.userId === currentUser;
+    return user.userId === post.userId;
   });
   return _react.default.createElement(PostContext.Provider, {
     value: {
@@ -36631,7 +36645,75 @@ function Feed() {
     }, _react.default.createElement(_PostHeader.default, null), _react.default.createElement(_PostDescription.default, null, post.postTextContent), _react.default.createElement(_PostImage.default, null), _react.default.createElement(_PostLikes.default, null), _react.default.createElement(_PostComments.default, null), _react.default.createElement(_PostAddComment.default, null));
   })));
 }
-},{"react":"node_modules/react/index.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js","./GlobalContext":"components/GlobalContext.js","./Post/Post":"components/Post/Post.js","./Post/PostHeader":"components/Post/PostHeader.js","./Post/PostDescription":"components/Post/PostDescription.js","./Post/PostImage":"components/Post/PostImage.js","./Post/PostComments":"components/Post/PostComments.js","./Post/PostLikes":"components/Post/PostLikes.js","./Post/PostAddComment":"components/Post/PostAddComment.js"}],"components/ProfileOptions.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js","./GlobalContext":"components/GlobalContext.js","./Post/Post":"components/Post/Post.js","./Post/PostHeader":"components/Post/PostHeader.js","./Post/PostDescription":"components/Post/PostDescription.js","./Post/PostImage":"components/Post/PostImage.js","./Post/PostComments":"components/Post/PostComments.js","./Post/PostLikes":"components/Post/PostLikes.js","./Post/PostAddComment":"components/Post/PostAddComment.js"}],"components/Menu.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = Menu;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _GlobalContext = require("./GlobalContext");
+
+var _reactRouterDom = require("react-router-dom");
+
+var _styledComponents = _interopRequireDefault(require("styled-components"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _templateObject2() {
+  var data = _taggedTemplateLiteral(["\n\tdisplay: flex;\n\tflex-direction: row;\n\tjustify-content: space-between;\n\tgap: 15px;\n\talign-items: center;\n\timg {\n\t\twidth: 35px;\n\t\theight: 35px;\n\t\tborder-radius: 50%;\n\t}\n"]);
+
+  _templateObject2 = function _templateObject2() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject() {
+  var data = _taggedTemplateLiteral(["\n\tul\xA0 {\n\t\tdisplay: flex;\n\t\tflex-direction: row;\n\t\tjustify-content: space-between;\n\t\talign-items: center;\n\t\tlist-style: none;\n\t\tpadding: 0;\n\t\tmargin: 0;\n\t}\n"]);
+
+  _templateObject = function _templateObject() {
+    return data;
+  };
+
+  return data;
+}
+
+function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+var NavStyles = _styledComponents.default.nav(_templateObject());
+
+var ProfileLinkStyles = _styledComponents.default.div(_templateObject2());
+
+function Menu() {
+  var _useContext = (0, _react.useContext)(_GlobalContext.GlobalContext),
+      state = _useContext.state;
+
+  var users = state.users,
+      currentUser = state.currentUser;
+  var currentUserObj = users.find(function (user) {
+    return user.userId === currentUser;
+  });
+  return _react.default.createElement("div", null, _react.default.createElement("h1", null, "Onjabook"), _react.default.createElement(NavStyles, null, _react.default.createElement("ul", null, _react.default.createElement("li", null, _react.default.createElement(_reactRouterDom.Link, {
+    to: "/"
+  }, "Feed")), _react.default.createElement("li", null, _react.default.createElement(_reactRouterDom.Link, {
+    to: "/add"
+  }, "Add a post")), _react.default.createElement("li", null, !currentUserObj && 'Loading...', currentUserObj && _react.default.createElement(_reactRouterDom.Link, {
+    to: "/options"
+  }, _react.default.createElement(ProfileLinkStyles, null, _react.default.createElement("span", null, currentUserObj.userName), _react.default.createElement("img", {
+    src: currentUserObj.profilePictureUrl,
+    alt: "Profile pic of ".concat(currentUserObj.userName)
+  })))))));
+}
+},{"react":"node_modules/react/index.js","./GlobalContext":"components/GlobalContext.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js"}],"components/ProfileOptions.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -36716,75 +36798,184 @@ function ProfileOptions() {
     required: true
   }), _react.default.createElement("button", null, "Save")));
 }
-},{"react":"node_modules/react/index.js","./GlobalContext":"components/GlobalContext.js","./Styles":"components/Styles.js"}],"components/Menu.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","./GlobalContext":"components/GlobalContext.js","./Styles":"components/Styles.js"}],"components/SwitchProfile.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = Menu;
+exports.default = SwitchProfile;
 
 var _react = _interopRequireWildcard(require("react"));
 
 var _GlobalContext = require("./GlobalContext");
 
-var _reactRouterDom = require("react-router-dom");
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
 
-var _styledComponents = _interopRequireDefault(require("styled-components"));
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+// map though them to create the options
+// how can we already select the profile that is current?
+function SwitchProfile() {
+  var _useContext = (0, _react.useContext)(_GlobalContext.GlobalContext),
+      state = _useContext.state,
+      dispatch = _useContext.dispatch;
+
+  var users = state.users,
+      currentUser = state.currentUser;
+  var usersOptions = users.map(function (user) {
+    return _react.default.createElement("option", {
+      key: user.userId,
+      value: user.userId
+    }, user.userName);
+  });
+
+  function switchAccount(e) {
+    e.preventDefault();
+    var newUserId = e.target.userSelect.value;
+    console.log(newUserId);
+    dispatch({
+      type: 'SWITCH_USER_ACCOUNT',
+      newUserId: newUserId
+    });
+  }
+
+  return _react.default.createElement("div", null, _react.default.createElement("form", {
+    onSubmit: switchAccount
+  }, _react.default.createElement("select", {
+    name: "userSelect",
+    defaultValue: currentUser
+  }, usersOptions), _react.default.createElement("button", null, "Save")));
+}
+},{"react":"node_modules/react/index.js","./GlobalContext":"components/GlobalContext.js"}],"components/AddProfile.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = AddProfile;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _GlobalContext = require("./GlobalContext");
+
+var _Styles = require("./Styles");
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-function _templateObject2() {
-  var data = _taggedTemplateLiteral(["\n\tdisplay: flex;\n\tflex-direction: row;\n\tjustify-content: space-between;\n\tgap: 15px;\n\talign-items: center;\n\timg {\n\t\twidth: 35px;\n\t\theight: 35px;\n\t\tborder-radius: 50%;\n\t}\n"]);
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
-  _templateObject2 = function _templateObject2() {
-    return data;
-  };
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
 
-  return data;
-}
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
-function _templateObject() {
-  var data = _taggedTemplateLiteral(["\n\tul\xA0 {\n\t\tdisplay: flex;\n\t\tflex-direction: row;\n\t\tjustify-content: space-between;\n\t\talign-items: center;\n\t\tlist-style: none;\n\t\tpadding: 0;\n\t\tmargin: 0;\n\t}\n"]);
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-  _templateObject = function _templateObject() {
-    return data;
-  };
+function AddProfile() {
+  var _useState = (0, _react.useState)(''),
+      _useState2 = _slicedToArray(_useState, 2),
+      username = _useState2[0],
+      setUsername = _useState2[1];
 
-  return data;
-}
+  var _useState3 = (0, _react.useState)('https://picsum.photos/100'),
+      _useState4 = _slicedToArray(_useState3, 2),
+      profilePicture = _useState4[0],
+      setProfilePicture = _useState4[1];
 
-function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+  var _useState5 = (0, _react.useState)(''),
+      _useState6 = _slicedToArray(_useState5, 2),
+      birthday = _useState6[0],
+      setBirthday = _useState6[1];
 
-var NavStyles = _styledComponents.default.nav(_templateObject());
-
-var ProfileLinkStyles = _styledComponents.default.div(_templateObject2());
-
-function Menu() {
   var _useContext = (0, _react.useContext)(_GlobalContext.GlobalContext),
-      state = _useContext.state;
+      dispatch = _useContext.dispatch;
 
-  var users = state.users,
-      currentUser = state.currentUser;
-  var currentUserObj = users.find(function (user) {
-    return user.userId === currentUser;
-  });
-  return _react.default.createElement("div", null, _react.default.createElement("h1", null, "Onjabook"), _react.default.createElement(NavStyles, null, _react.default.createElement("ul", null, _react.default.createElement("li", null, _react.default.createElement(_reactRouterDom.Link, {
-    to: "/"
-  }, "Feed")), _react.default.createElement("li", null, _react.default.createElement(_reactRouterDom.Link, {
-    to: "/add"
-  }, "Add a post")), _react.default.createElement("li", null, !currentUserObj && 'Loading...', currentUserObj && _react.default.createElement(_reactRouterDom.Link, {
-    to: "/options"
-  }, _react.default.createElement(ProfileLinkStyles, null, _react.default.createElement("span", null, currentUserObj.userName), _react.default.createElement("img", {
-    src: currentUserObj.profilePictureUrl,
-    alt: "Profile pic of ".concat(currentUserObj.userName)
-  })))))));
+  function createNewUser(e) {
+    e.preventDefault();
+    var newUser = {
+      userId: Date.now().toString(),
+      userName: username,
+      profilePictureUrl: profilePicture,
+      birthDate: birthday
+    };
+    dispatch({
+      type: 'ADD_NEW_USER',
+      newUser: newUser
+    });
+    alert('NEW USER ADDED!'); // dispatch new action, with the object attached to it
+  }
+
+  return _react.default.createElement(_Styles.FormStyle, {
+    onSubmit: createNewUser
+  }, _react.default.createElement("label", null, "Username : "), _react.default.createElement("input", {
+    type: "text",
+    value: username,
+    onChange: function onChange(e) {
+      return setUsername(e.target.value);
+    },
+    placeholder: "Enter the username of the new user",
+    required: true
+  }), _react.default.createElement("label", null, "Profile Pic : "), _react.default.createElement("input", {
+    type: "text",
+    value: profilePicture,
+    onChange: function onChange(e) {
+      return setProfilePicture(e.target.value);
+    },
+    placeholder: "Paste an URL pic of the new user",
+    required: true
+  }), _react.default.createElement("label", null, "Birthday : "), _react.default.createElement("input", {
+    type: "date",
+    value: birthday,
+    onChange: function onChange(e) {
+      return setBirthday(e.target.value);
+    },
+    required: true
+  }), _react.default.createElement("button", null, "Create new user"));
 }
-},{"react":"node_modules/react/index.js","./GlobalContext":"components/GlobalContext.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js"}],"components/App.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","./GlobalContext":"components/GlobalContext.js","./Styles":"components/Styles.js"}],"components/Options.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = Options;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _reactRouterDom = require("react-router-dom");
+
+var _ProfileOptions = _interopRequireDefault(require("./ProfileOptions"));
+
+var _SwitchProfile = _interopRequireDefault(require("./SwitchProfile"));
+
+var _AddProfile = _interopRequireDefault(require("./AddProfile"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// menu + 3 other components
+// switch will live here
+// profile options
+// switch profile
+// add profile
+function Options() {
+  return _react.default.createElement("div", null, _react.default.createElement(_reactRouterDom.Link, {
+    to: "/options"
+  }, "Account Options"), _react.default.createElement(_reactRouterDom.Link, {
+    to: "/options/switch"
+  }, "Switch Profile"), _react.default.createElement(_reactRouterDom.Link, {
+    to: "/options/add"
+  }, "Add Profile"), _react.default.createElement(_reactRouterDom.Switch, null, _react.default.createElement(_reactRouterDom.Route, {
+    path: "/options",
+    exact: true
+  }, _react.default.createElement(_ProfileOptions.default, null)), _react.default.createElement(_reactRouterDom.Route, {
+    path: "/options/switch"
+  }, _react.default.createElement(_SwitchProfile.default, null)), _react.default.createElement(_reactRouterDom.Route, {
+    path: "/options/add"
+  }, _react.default.createElement(_AddProfile.default, null))));
+}
+},{"react":"node_modules/react/index.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js","./ProfileOptions":"components/ProfileOptions.js","./SwitchProfile":"components/SwitchProfile.js","./AddProfile":"components/AddProfile.js"}],"components/App.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -36800,9 +36991,9 @@ var _AddPost = _interopRequireDefault(require("./AddPost"));
 
 var _Feed = _interopRequireDefault(require("./Feed"));
 
-var _ProfileOptions = _interopRequireDefault(require("./ProfileOptions"));
-
 var _Menu = _interopRequireDefault(require("./Menu"));
+
+var _Options = _interopRequireDefault(require("./Options"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -36814,9 +37005,9 @@ function App() {
     path: "/add"
   }, _react.default.createElement(_AddPost.default, null)), _react.default.createElement(_reactRouterDom.Route, {
     path: "/options"
-  }, _react.default.createElement(_ProfileOptions.default, null))));
+  }, _react.default.createElement(_Options.default, null))));
 }
-},{"react":"node_modules/react/index.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js","./AddPost":"components/AddPost.js","./Feed":"components/Feed.js","./ProfileOptions":"components/ProfileOptions.js","./Menu":"components/Menu.js"}],"index.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js","./AddPost":"components/AddPost.js","./Feed":"components/Feed.js","./Menu":"components/Menu.js","./Options":"components/Options.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -36860,7 +37051,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56105" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56344" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

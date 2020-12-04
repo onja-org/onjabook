@@ -2,8 +2,9 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import AddPost from './AddPost';
 import Feed from './Feed';
-import ProfileOptions from './ProfileOptions';
+
 import Menu from './Menu';
+import Options from './Options';
 
 export default function App() {
 	return (
@@ -17,7 +18,7 @@ export default function App() {
 					<AddPost />
 				</Route>
 				<Route path="/options">
-					<ProfileOptions />
+					<Options />
 				</Route>
 			</Switch>
 		</div>
