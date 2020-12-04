@@ -33882,7 +33882,7 @@ module.exports = [{
   "postId": "2",
   "date": 1606974838999,
   "postTextContent": "This is my second post!",
-  "userId": "1",
+  "userId": "2",
   "imgUrl": "http://picsum.photos/500",
   "likes": [{
     "likeId": "2",
@@ -36238,8 +36238,7 @@ function Post(_ref) {
   var _useContext = (0, _react.useContext)(_GlobalContext.GlobalContext),
       state = _useContext.state;
 
-  var users = state.users,
-      currentUser = state.currentUser;
+  var users = state.users;
   var currentUserObj = users.find(function (user) {
     return user.userId === post.userId;
   });
@@ -37051,7 +37050,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56344" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55564" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
