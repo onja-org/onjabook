@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
+
+import { GlobalContext } from './GlobalContext';
 
 const AddCommentFormStyles = styled.form`
 	display: flex;
@@ -16,9 +18,32 @@ const AddCommentFormStyles = styled.form`
 `;
 
 export default function AddComment({ post }) {
+	const [newCommentText, setNewComment] = useState('');
+	const { state, dispatch } = useContext(GlobalContext);
+	const { currentUser } = state;
+
+	function addComment(e) {
+		e.preventDefault();
+		const newComment = {
+			commentId: Date.now(),
+			userId: currentUser,
+			date: Date.now(),
+			commentTextContent: newCommentText,
+		};
+		// Add a new dispatch action "ADD POST" (very similar to add like)
+		dispatch({ type: 'ADD_COMMENT_TO_POST', postId: post.postId, newComment });
+		setNewComment('');
+	}
+
 	return (
-		<AddCommentFormStyles>
-			<input type="text" placeholder="Type your comment here" />
+		<AddCommentFormStyles onSubmit={addComment}>
+			<input
+				type="text"
+				value={newCommentText}
+				onChange={e => setNewComment(e.target.value)}
+				placeholder="Type your comment here"
+				required
+			/>
 			<button>Post</button>
 		</AddCommentFormStyles>
 	);

@@ -33968,7 +33968,7 @@ function GlobalContextProvider(_ref) {
     switch (action.type) {
       case 'LOAD_JSON_DATA':
         {
-          // there should be some fetching here
+          // usually, there should be some fetching here
           return _objectSpread({}, state, {
             loading: false,
             posts: _postsData.default,
@@ -34014,6 +34014,42 @@ function GlobalContextProvider(_ref) {
           });
           return _objectSpread({}, state, {
             posts: newPosts
+          });
+        }
+
+      case 'UNLIKE_POST':
+        {
+          var _newPosts = state.posts.map(function (post) {
+            if (post.postId === action.postId) {
+              return _objectSpread({}, post, {
+                likes: post.likes.filter(function (like) {
+                  return like.userId !== state.currentUser;
+                })
+              });
+            }
+
+            return post;
+          });
+
+          return _objectSpread({}, state, {
+            posts: _newPosts
+          });
+        }
+
+      case 'ADD_COMMENT_TO_POST':
+        {
+          var _newPosts2 = state.posts.map(function (post) {
+            if (post.postId === action.postId) {
+              return _objectSpread({}, post, {
+                comments: [].concat(_toConsumableArray(post.comments), [action.newComment])
+              });
+            }
+
+            return post;
+          });
+
+          return _objectSpread({}, state, {
+            posts: _newPosts2
           });
         }
 
@@ -36178,7 +36214,10 @@ function Likes(_ref) {
 
   var currentUser = state.currentUser;
 
-  function checkIfLikedOrNot() {// check if we already like the post
+  function checkIfLikedOrNot() {
+    return post.likes.some(function (like) {
+      return like.userId === currentUser;
+    });
   }
 
   function likePost() {
@@ -36193,10 +36232,16 @@ function Likes(_ref) {
     });
   }
 
-  function unlikePost() {// unlike a post!
+  function unlikePost() {
+    dispatch({
+      type: 'UNLIKE_POST',
+      postId: post.postId
+    });
   }
 
-  return _react.default.createElement(PostLikesStyles, null, _react.default.createElement("button", {
+  return _react.default.createElement(PostLikesStyles, null, checkIfLikedOrNot() ? _react.default.createElement("button", {
+    onClick: unlikePost
+  }, "UnLike") : _react.default.createElement("button", {
     onClick: likePost
   }, "Like"), _react.default.createElement("span", null, post.likes.length));
 }
@@ -36208,11 +36253,25 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = AddComment;
 
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
 
 var _styledComponents = _interopRequireDefault(require("styled-components"));
 
+var _GlobalContext = require("./GlobalContext");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function _templateObject() {
   var data = _taggedTemplateLiteral(["\n\tdisplay: flex;\n\tgrid-gap: 10px;\n\tjustify-content: space-between;\n\tbackground: #c4c4c4;\n\tpadding: 0.6rem;\n\tborder-radius: 10px;\n\tinput {\n\t\tbackground: none;\n\t\tborder: none;\n\t\twidth: 100%;\n\t}\n"]);
@@ -36230,12 +36289,48 @@ var AddCommentFormStyles = _styledComponents.default.form(_templateObject());
 
 function AddComment(_ref) {
   var post = _ref.post;
-  return _react.default.createElement(AddCommentFormStyles, null, _react.default.createElement("input", {
+
+  var _useState = (0, _react.useState)(''),
+      _useState2 = _slicedToArray(_useState, 2),
+      newCommentText = _useState2[0],
+      setNewComment = _useState2[1];
+
+  var _useContext = (0, _react.useContext)(_GlobalContext.GlobalContext),
+      state = _useContext.state,
+      dispatch = _useContext.dispatch;
+
+  var currentUser = state.currentUser;
+
+  function addComment(e) {
+    e.preventDefault();
+    var newComment = {
+      commentId: Date.now(),
+      userId: currentUser,
+      date: Date.now(),
+      commentTextContent: newCommentText
+    }; // Add a new dispatch action "ADD POST" (very similar to add like)
+
+    dispatch({
+      type: 'ADD_COMMENT_TO_POST',
+      postId: post.postId,
+      newComment: newComment
+    });
+    setNewComment('');
+  }
+
+  return _react.default.createElement(AddCommentFormStyles, {
+    onSubmit: addComment
+  }, _react.default.createElement("input", {
     type: "text",
-    placeholder: "Type your comment here"
+    value: newCommentText,
+    onChange: function onChange(e) {
+      return setNewComment(e.target.value);
+    },
+    placeholder: "Type your comment here",
+    required: true
   }), _react.default.createElement("button", null, "Post"));
 }
-},{"react":"node_modules/react/index.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js"}],"components/Post.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js","./GlobalContext":"components/GlobalContext.js"}],"components/Post.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -36295,7 +36390,15 @@ var PostStyles = _styledComponents.default.div(_templateObject());
 
 var ContentHeaderStyles = _styledComponents.default.div(_templateObject2());
 
-var PostCommentContainerStyles = _styledComponents.default.div(_templateObject3());
+var PostCommentContainerStyles = _styledComponents.default.div(_templateObject3()); // CompoundComponent Post
+// --------
+// PostHeader
+// PostImage
+// PostDescription
+// PostLikes
+// PostComments
+// AddPostComment
+
 
 function Post(_ref) {
   var post = _ref.post;
@@ -36615,7 +36718,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49641" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50153" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

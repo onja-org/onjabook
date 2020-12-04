@@ -34,6 +34,15 @@ const PostCommentContainerStyles = styled.div`
 	gap: 10px;
 `;
 
+// CompoundComponent Post
+// --------
+// PostHeader
+// PostImage
+// PostDescription
+// PostLikes
+// PostComments
+// AddPostComment
+
 export default function Post({ post }) {
 	const { state, dispatch } = useContext(GlobalContext);
 	const { currentUser, users } = state;

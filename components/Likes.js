@@ -13,7 +13,7 @@ export default function Likes({ post }) {
 	const { currentUser } = state;
 
 	function checkIfLikedOrNot() {
-		// check if we already like the post
+		return post.likes.some(like => like.userId === currentUser);
 	}
 
 	function likePost() {
@@ -25,12 +25,17 @@ export default function Likes({ post }) {
 	}
 
 	function unlikePost() {
-		// unlike a post!
+		dispatch({ type: 'UNLIKE_POST', postId: post.postId });
 	}
 
 	return (
 		<PostLikesStyles>
-			<button onClick={likePost}>Like</button>
+			{checkIfLikedOrNot() ? (
+				<button onClick={unlikePost}>UnLike</button>
+			) : (
+				<button onClick={likePost}>Like</button>
+			)}
+
 			<span>{post.likes.length}</span>
 		</PostLikesStyles>
 	);

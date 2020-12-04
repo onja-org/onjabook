@@ -9,7 +9,7 @@ function GlobalContextProvider({ children }) {
 		(state, action) => {
 			switch (action.type) {
 				case 'LOAD_JSON_DATA': {
-					// there should be some fetching here
+					// usually, there should be some fetching here
 					return {
 						...state,
 						loading: false,
@@ -46,6 +46,36 @@ function GlobalContextProvider({ children }) {
 							return {
 								...post,
 								likes: [...post.likes, action.newLike],
+							};
+						}
+						return post;
+					});
+					return {
+						...state,
+						posts: newPosts,
+					};
+				}
+				case 'UNLIKE_POST': {
+					const newPosts = state.posts.map(post => {
+						if (post.postId === action.postId) {
+							return {
+								...post,
+								likes: post.likes.filter(like => like.userId !== state.currentUser),
+							};
+						}
+						return post;
+					});
+					return {
+						...state,
+						posts: newPosts,
+					};
+				}
+				case 'ADD_COMMENT_TO_POST': {
+					const newPosts = state.posts.map(post => {
+						if (post.postId === action.postId) {
+							return {
+								...post,
+								comments: [...post.comments, action.newComment],
 							};
 						}
 						return post;
