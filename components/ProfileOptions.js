@@ -20,7 +20,7 @@ export default function ProfileOptions() {
 		setProfilePictureUrl(currentUserObj.profilePictureUrl);
 	}, [users]);
 
-	function handleNewOptions(e) {
+	function updateUserOptions(e) {
 		e.preventDefault();
 		dispatch({ type: 'UPDATE_CURRENT_USER', userName, profilePictureUrl });
 		alert('Profile updated successfully');
@@ -28,7 +28,7 @@ export default function ProfileOptions() {
 	return (
 		<div>
 			<h2>Profile Options</h2>
-			<FormStyle onSubmit={handleNewOptions}>
+			<FormStyle onSubmit={updateUserOptions}>
 				<input
 					type="text"
 					value={userName}
