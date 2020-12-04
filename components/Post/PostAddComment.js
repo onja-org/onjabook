@@ -1,7 +1,8 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 
-import { GlobalContext } from './GlobalContext';
+import { GlobalContext } from '../GlobalContext';
+import { PostContext } from './Post';
 
 const AddCommentFormStyles = styled.form`
 	display: flex;
@@ -17,9 +18,10 @@ const AddCommentFormStyles = styled.form`
 	}
 `;
 
-export default function AddComment({ post }) {
+export default function PostAddComment() {
 	const [newCommentText, setNewComment] = useState('');
 	const { state, dispatch } = useContext(GlobalContext);
+	const { post } = useContext(PostContext);
 	const { currentUser } = state;
 
 	function addComment(e) {

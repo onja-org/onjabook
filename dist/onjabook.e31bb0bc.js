@@ -36171,19 +36171,254 @@ function AddPost() {
     required: true
   }), _react.default.createElement("button", null, "Post")));
 }
-},{"react":"node_modules/react/index.js","./GlobalContext":"components/GlobalContext.js","./Styles":"components/Styles.js"}],"components/Likes.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","./GlobalContext":"components/GlobalContext.js","./Styles":"components/Styles.js"}],"components/Post/Post.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = Likes;
+exports.default = Post;
+exports.PostContext = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
 var _styledComponents = _interopRequireDefault(require("styled-components"));
 
-var _GlobalContext = require("./GlobalContext");
+var _GlobalContext = require("../GlobalContext");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _templateObject() {
+  var data = _taggedTemplateLiteral(["\n\tdisplay: grid;\n\tgrid-template-columns: 500px;\n\tgap: 10px;\n\t.main-picture {\n\t\twidth: 100%;\n\t}\n"]);
+
+  _templateObject = function _templateObject() {
+    return data;
+  };
+
+  return data;
+}
+
+function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+var PostStyles = _styledComponents.default.div(_templateObject()); // CompoundComponent Post
+// --------
+// PostHeader OK
+// PostDescription OK
+// PostImage OK
+// PostLikes OK
+// PostComments OK
+// AddPostComment OK
+
+
+var PostContext = (0, _react.createContext)();
+exports.PostContext = PostContext;
+
+function Post(_ref) {
+  var post = _ref.post,
+      children = _ref.children;
+
+  var _useContext = (0, _react.useContext)(_GlobalContext.GlobalContext),
+      state = _useContext.state;
+
+  var users = state.users,
+      currentUser = state.currentUser;
+  var currentUserObj = users.find(function (user) {
+    return user.userId === currentUser;
+  });
+  return _react.default.createElement(PostContext.Provider, {
+    value: {
+      post: post,
+      currentUserObj: currentUserObj
+    }
+  }, _react.default.createElement(PostStyles, null, children));
+}
+},{"react":"node_modules/react/index.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js","../GlobalContext":"components/GlobalContext.js"}],"components/Post/PostHeader.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = PostHeader;
+exports.ContentHeaderStyles = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _styledComponents = _interopRequireDefault(require("styled-components"));
+
+var _Post = require("./Post");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _templateObject() {
+  var data = _taggedTemplateLiteral(["\n\tdisplay: grid;\n\tgap: 20px;\n\tgrid-template-columns: auto 1fr 1fr;\n\talign-items: center;\n\t.post-date {\n\t\ttext-align: right;\n\t}\n\timg {\n\t\twidth: 35px;\n\t\theight: 35px;\n\t\tborder-radius: 50%;\n\t}\n"]);
+
+  _templateObject = function _templateObject() {
+    return data;
+  };
+
+  return data;
+}
+
+function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+var ContentHeaderStyles = _styledComponents.default.div(_templateObject()); // TODO: currentUserObj from CONTEXT
+
+
+exports.ContentHeaderStyles = ContentHeaderStyles;
+
+function PostHeader() {
+  var _useContext = (0, _react.useContext)(_Post.PostContext),
+      post = _useContext.post,
+      currentUserObj = _useContext.currentUserObj;
+
+  return _react.default.createElement(ContentHeaderStyles, null, _react.default.createElement("img", {
+    src: currentUserObj.profilePictureUrl,
+    alt: "profile pic of ".concat(currentUserObj.userName)
+  }), _react.default.createElement("span", null, currentUserObj.userName), _react.default.createElement("span", {
+    className: "post-date"
+  }, new Date(post.date).toLocaleDateString()));
+}
+},{"react":"node_modules/react/index.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js","./Post":"components/Post/Post.js"}],"components/Post/PostDescription.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = PostDescription;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _styledComponents = _interopRequireDefault(require("styled-components"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _templateObject() {
+  var data = _taggedTemplateLiteral(["\n\tfont-size: 2rem;\n\tfont-weight: 600;\n"]);
+
+  _templateObject = function _templateObject() {
+    return data;
+  };
+
+  return data;
+}
+
+function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+var DescriptionStyle = _styledComponents.default.p(_templateObject());
+
+function PostDescription(_ref) {
+  var children = _ref.children;
+  return _react.default.createElement(DescriptionStyle, null, children);
+}
+},{"react":"node_modules/react/index.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js"}],"components/Post/PostImage.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = PostImage;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _Post = require("./Post");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function PostImage() {
+  var _useContext = (0, _react.useContext)(_Post.PostContext),
+      post = _useContext.post;
+
+  return _react.default.createElement("img", {
+    className: "main-picture",
+    src: post.imgUrl,
+    alt: "Post picture - ".concat(post.postTextContent)
+  });
+}
+},{"react":"node_modules/react/index.js","./Post":"components/Post/Post.js"}],"components/Post/PostComments.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = PostComments;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _styledComponents = _interopRequireDefault(require("styled-components"));
+
+var _Post = require("./Post");
+
+var _GlobalContext = require("../GlobalContext");
+
+var _PostHeader = require("./PostHeader");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _templateObject() {
+  var data = _taggedTemplateLiteral(["\n\tdisplay: grid;\n\tgap: 10px;\n"]);
+
+  _templateObject = function _templateObject() {
+    return data;
+  };
+
+  return data;
+}
+
+function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+var PostCommentContainerStyles = _styledComponents.default.div(_templateObject());
+
+function PostComments() {
+  var _useContext = (0, _react.useContext)(_Post.PostContext),
+      post = _useContext.post;
+
+  var _useContext2 = (0, _react.useContext)(_GlobalContext.GlobalContext),
+      state = _useContext2.state;
+
+  var users = state.users;
+  return _react.default.createElement(PostCommentContainerStyles, null, _react.default.createElement("div", null, post.comments.map(function (comment) {
+    var commenter = users.find(function (user) {
+      return user.userId === comment.userId;
+    });
+    return _react.default.createElement("div", {
+      key: comment.commentId
+    }, _react.default.createElement(_PostHeader.ContentHeaderStyles, null, _react.default.createElement("img", {
+      src: commenter.profilePictureUrl,
+      alt: "profile pic of ".concat(commenter.userName)
+    }), _react.default.createElement("span", null, commenter.userName), _react.default.createElement("span", {
+      className: "post-date"
+    }, new Date(comment.date).toLocaleDateString())), _react.default.createElement("p", null, comment.commentTextContent));
+  })));
+}
+},{"react":"node_modules/react/index.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js","./Post":"components/Post/Post.js","../GlobalContext":"components/GlobalContext.js","./PostHeader":"components/Post/PostHeader.js"}],"components/Post/PostLikes.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = PostLikes;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _styledComponents = _interopRequireDefault(require("styled-components"));
+
+var _Post = require("./Post");
+
+var _GlobalContext = require("../GlobalContext");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -36205,12 +36440,13 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 var PostLikesStyles = _styledComponents.default.div(_templateObject());
 
-function Likes(_ref) {
-  var post = _ref.post;
-
+function PostLikes() {
   var _useContext = (0, _react.useContext)(_GlobalContext.GlobalContext),
       state = _useContext.state,
       dispatch = _useContext.dispatch;
+
+  var _useContext2 = (0, _react.useContext)(_Post.PostContext),
+      post = _useContext2.post;
 
   var currentUser = state.currentUser;
 
@@ -36245,19 +36481,21 @@ function Likes(_ref) {
     onClick: likePost
   }, "Like"), _react.default.createElement("span", null, post.likes.length));
 }
-},{"react":"node_modules/react/index.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js","./GlobalContext":"components/GlobalContext.js"}],"components/AddComment.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js","./Post":"components/Post/Post.js","../GlobalContext":"components/GlobalContext.js"}],"components/Post/PostAddComment.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = AddComment;
+exports.default = PostAddComment;
 
 var _react = _interopRequireWildcard(require("react"));
 
 var _styledComponents = _interopRequireDefault(require("styled-components"));
 
-var _GlobalContext = require("./GlobalContext");
+var _GlobalContext = require("../GlobalContext");
+
+var _Post = require("./Post");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -36287,9 +36525,7 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 var AddCommentFormStyles = _styledComponents.default.form(_templateObject());
 
-function AddComment(_ref) {
-  var post = _ref.post;
-
+function PostAddComment() {
   var _useState = (0, _react.useState)(''),
       _useState2 = _slicedToArray(_useState, 2),
       newCommentText = _useState2[0],
@@ -36298,6 +36534,9 @@ function AddComment(_ref) {
   var _useContext = (0, _react.useContext)(_GlobalContext.GlobalContext),
       state = _useContext.state,
       dispatch = _useContext.dispatch;
+
+  var _useContext2 = (0, _react.useContext)(_Post.PostContext),
+      post = _useContext2.post;
 
   var currentUser = state.currentUser;
 
@@ -36330,116 +36569,7 @@ function AddComment(_ref) {
     required: true
   }), _react.default.createElement("button", null, "Post"));
 }
-},{"react":"node_modules/react/index.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js","./GlobalContext":"components/GlobalContext.js"}],"components/Post.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = Post;
-
-var _react = _interopRequireWildcard(require("react"));
-
-var _styledComponents = _interopRequireDefault(require("styled-components"));
-
-var _GlobalContext = require("./GlobalContext");
-
-var _Likes = _interopRequireDefault(require("./Likes"));
-
-var _AddComment = _interopRequireDefault(require("./AddComment"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-function _templateObject3() {
-  var data = _taggedTemplateLiteral(["\n\tdisplay: grid;\n\tgap: 10px;\n"]);
-
-  _templateObject3 = function _templateObject3() {
-    return data;
-  };
-
-  return data;
-}
-
-function _templateObject2() {
-  var data = _taggedTemplateLiteral(["\n\tdisplay: grid;\n\tgap: 20px;\n\tgrid-template-columns: auto 1fr 1fr;\n\talign-items: center;\n\t.post-date {\n\t\ttext-align: right;\n\t}\n\timg {\n\t\twidth: 35px;\n\t\theight: 35px;\n\t\tborder-radius: 50%;\n\t}\n"]);
-
-  _templateObject2 = function _templateObject2() {
-    return data;
-  };
-
-  return data;
-}
-
-function _templateObject() {
-  var data = _taggedTemplateLiteral(["\n\tdisplay: grid;\n\tgrid-template-columns: 500px;\n\tgap: 10px;\n\t.main-picture {\n\t\twidth: 100%;\n\t}\n"]);
-
-  _templateObject = function _templateObject() {
-    return data;
-  };
-
-  return data;
-}
-
-function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
-
-var PostStyles = _styledComponents.default.div(_templateObject());
-
-var ContentHeaderStyles = _styledComponents.default.div(_templateObject2());
-
-var PostCommentContainerStyles = _styledComponents.default.div(_templateObject3()); // CompoundComponent Post
-// --------
-// PostHeader
-// PostImage
-// PostDescription
-// PostLikes
-// PostComments
-// AddPostComment
-
-
-function Post(_ref) {
-  var post = _ref.post;
-
-  var _useContext = (0, _react.useContext)(_GlobalContext.GlobalContext),
-      state = _useContext.state,
-      dispatch = _useContext.dispatch;
-
-  var currentUser = state.currentUser,
-      users = state.users;
-  var currentUserObj = users.find(function (user) {
-    return user.userId === currentUser;
-  });
-  return _react.default.createElement(PostStyles, null, _react.default.createElement(ContentHeaderStyles, null, _react.default.createElement("img", {
-    src: currentUserObj.profilePictureUrl,
-    alt: "profile pic of ".concat(currentUserObj.userName)
-  }), _react.default.createElement("span", null, currentUserObj.userName), _react.default.createElement("span", {
-    className: "post-date"
-  }, new Date(post.date).toLocaleDateString())), _react.default.createElement("p", null, post.postTextContent), _react.default.createElement("img", {
-    className: "main-picture",
-    src: post.imgUrl,
-    alt: "Post picture - ".concat(post.postTextContent)
-  }), _react.default.createElement(_Likes.default, {
-    post: post
-  }), _react.default.createElement(PostCommentContainerStyles, null, _react.default.createElement("div", null, post.comments.map(function (comment) {
-    var commentUserObj = users.find(function (user) {
-      return user.userId === comment.userId;
-    });
-    return _react.default.createElement("div", {
-      key: comment.commentId
-    }, _react.default.createElement(ContentHeaderStyles, null, _react.default.createElement("img", {
-      src: commentUserObj.profilePictureUrl,
-      alt: "profile pic of ".concat(commentUserObj.userName)
-    }), _react.default.createElement("span", null, commentUserObj.userName), _react.default.createElement("span", {
-      className: "post-date"
-    }, new Date(comment.date).toLocaleDateString())), _react.default.createElement("p", null, comment.commentTextContent));
-  })), _react.default.createElement(_AddComment.default, {
-    post: post
-  })));
-}
-},{"react":"node_modules/react/index.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js","./GlobalContext":"components/GlobalContext.js","./Likes":"components/Likes.js","./AddComment":"components/AddComment.js"}],"components/Feed.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js","../GlobalContext":"components/GlobalContext.js","./Post":"components/Post/Post.js"}],"components/Feed.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -36453,7 +36583,19 @@ var _styledComponents = _interopRequireDefault(require("styled-components"));
 
 var _GlobalContext = require("./GlobalContext");
 
-var _Post = _interopRequireDefault(require("./Post"));
+var _Post = _interopRequireDefault(require("./Post/Post"));
+
+var _PostHeader = _interopRequireDefault(require("./Post/PostHeader"));
+
+var _PostDescription = _interopRequireDefault(require("./Post/PostDescription"));
+
+var _PostImage = _interopRequireDefault(require("./Post/PostImage"));
+
+var _PostComments = _interopRequireDefault(require("./Post/PostComments"));
+
+var _PostLikes = _interopRequireDefault(require("./Post/PostLikes"));
+
+var _PostAddComment = _interopRequireDefault(require("./Post/PostAddComment"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -36486,10 +36628,10 @@ function Feed() {
     return _react.default.createElement(_Post.default, {
       key: post.postId,
       post: post
-    });
+    }, _react.default.createElement(_PostHeader.default, null), _react.default.createElement(_PostDescription.default, null, post.postTextContent), _react.default.createElement(_PostImage.default, null), _react.default.createElement(_PostLikes.default, null), _react.default.createElement(_PostComments.default, null), _react.default.createElement(_PostAddComment.default, null));
   })));
 }
-},{"react":"node_modules/react/index.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js","./GlobalContext":"components/GlobalContext.js","./Post":"components/Post.js"}],"components/ProfileOptions.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js","./GlobalContext":"components/GlobalContext.js","./Post/Post":"components/Post/Post.js","./Post/PostHeader":"components/Post/PostHeader.js","./Post/PostDescription":"components/Post/PostDescription.js","./Post/PostImage":"components/Post/PostImage.js","./Post/PostComments":"components/Post/PostComments.js","./Post/PostLikes":"components/Post/PostLikes.js","./Post/PostAddComment":"components/Post/PostAddComment.js"}],"components/ProfileOptions.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -36718,7 +36860,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50153" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53886" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

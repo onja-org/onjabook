@@ -1,15 +1,17 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 
-import { GlobalContext } from './GlobalContext';
+import { PostContext } from './Post';
+import { GlobalContext } from '../GlobalContext';
 
 const PostLikesStyles = styled.div`
 	display: flex;
 	gap: 10px;
 `;
 
-export default function Likes({ post }) {
+export default function PostLikes() {
 	const { state, dispatch } = useContext(GlobalContext);
+	const { post } = useContext(PostContext);
 	const { currentUser } = state;
 
 	function checkIfLikedOrNot() {
